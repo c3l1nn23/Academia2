@@ -71,7 +71,12 @@ O projeto utiliza um arquivo `.env` para gerenciar as variáveis de ambiente. Ce
 
 ```
 SECRET_KEY=sua-chave-secreta-aqui
-DEBUG=True
+DEBUG=False
+ALLOWED_HOSTS=localhost,127.0.0.1
+CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+CSRF_TRUSTED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+# DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/DBNAME
+# SECURE_SSL_REDIRECT=True
 ```
 
 > **Nota:** Para produção, `DEBUG` deve ser `False` e a `SECRET_KEY` deve ser uma chave segura e única.

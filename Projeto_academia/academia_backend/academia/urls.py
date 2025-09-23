@@ -10,6 +10,8 @@ from . import views
 # Router para ViewSets
 router = DefaultRouter()
 router.register(r'planos', views.PlanoViewSet)
+router.register(r'usuarios', views.UsuarioViewSet)
+router.register(r'matriculas', views.MatriculaViewSet, basename='matricula')
 
 urlpatterns = [
     # URLs do router
