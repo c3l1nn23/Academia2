@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escolher Plano • Portal</title>
+  <link rel="icon" href="{% static 'images/favicon.ico' %}">
+  <link rel="stylesheet" href="{% static 'css/portal.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+  <header class="portal-header">
+    <div class="brand"><i class="fa-solid fa-dumbbell"></i> AthleTech • Planos</div>
+    <nav class="header-actions">
+      <a href="/portal/" class="btn small">Portal</a>
+      <a href="/" class="btn small alt">Início</a>
+    </nav>
+  </header>
+
+  <main class="content">
+    <section class="card">
+      <h2>Escolha seu plano</h2>
+      <p class="muted">Pague via PIX para liberar imediatamente seu acesso.</p>
+      <div id="grid-planos" class="grid-3"></div>
+    </section>
+  </main>
+
+  <script src="{% static 'js/config.js' %}"></script>
+  <script>
+    const API_BASE_URL = '/api';
+    function isLogged() { return !!localStorage.getItem('access_token'); }
+    async function authFetch(url, options={}) {
+      const h = options.headers || {}; h['Content-Type'] = 'application/json';
+      const t = localStorage.getItem('access_token'); if (t) h['Authorization'] = `Bearer ${t}`;
+      return await fetch(url, { ...options, headers: h });
+    }
+    function buildCard(plano) {
+      const dias = plano.duracao_dias;
+      const tier = window.getPlanTier(dias);
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>${plano.nome}</h3>
+        <p>${dias} dias</p>
+        <div class="price">R$ ${Number(plano.preco).toFixed(2)}</div>
+        <button class="btn" data-id="${plano.id}">Assinar com PIX</button>
+      `;
+      card.querySelector('button').addEventListener('click', () => comprar(plano));
+      return card;
+    }
+    async function renderPlanos() {
+      const res = await fetch(`${API_BASE_URL}/planos/`);
+      const data = await res.json();
+      const planos = Array.isArray(data) ? data : data.results || [];
+      const grid = document.getElementById('grid-planos');
+      grid.innerHTML = '';
+      planos.forEach(p => grid.appendChild(buildCard(p)));
+    }
+    function comprar(plano) {
+      if (!isLogged()) { window.location.href = '/login/?redirect=/portal/planos/'; return; }
+      // guardar pendência de compra e ir ao checkout
+      const pending = { userData: null, planoId: plano.id, paymentMethod: 'pix', preco: String(plano.preco), dias: String(plano.duracao_dias), tier: window.getPlanTier(plano.duracao_dias) };
+      localStorage.setItem('pending_signup', JSON.stringify(pending));
+      const qs = new URLSearchParams({ plano_id: String(plano.id), method: 'pix', preco: String(plano.preco), tier: pending.tier });
+      window.location.href = `/static/html/checkout_frontend.html?${qs.toString()}`;
+    }
+    renderPlanos();
+  </script>
+</body>
+</html>
