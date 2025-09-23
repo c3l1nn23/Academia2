@@ -9,15 +9,17 @@ window.SALES_CONFIG = {
   },
   // Regras de pagamento por tipo
   paymentRules: {
-    mensal: ['cartao', 'pix'],
-    trimestral: ['cartao'],
-    anual: ['cartao']
+    mensal: ['pix'],
+    trimestral: ['pix'],
+    anual: ['pix']
   },
   // Labels amigáveis
   labels: {
     cartao: 'Cartão de crédito',
     pix: 'PIX'
   },
+  // Chave PIX (edite aqui)
+  pixKey: '21968642276',
   // Provedores (para integração futura)
   gateways: {
     cartao: 'mercadopago',

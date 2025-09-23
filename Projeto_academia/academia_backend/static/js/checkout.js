@@ -48,10 +48,14 @@ document.addEventListener('DOMContentLoaded', function() {
   // Botão de gerar PIX (simulação)
   document.getElementById('btn_gerar_pix').addEventListener('click', function() {
     const txt = document.getElementById('pix_copy');
-    const dummyCode = `00020126360014BR.GOV.BCB.PIX0114+5547999999995204000053039865802BR5913ATHLETECH LTDA6009SAO PAULO62070503***6304ABCD`;
-    txt.value = dummyCode;
+    const pixKey = (window.SALES_CONFIG && window.SALES_CONFIG.pixKey) ? String(window.SALES_CONFIG.pixKey) : '';
+    const valueStr = ckPreco.textContent.replace(/[^0-9.,]/g, '').replace(',', '.');
+    const value = parseFloat(valueStr || '0').toFixed(2);
+    // Atenção: abaixo é apenas um payload didático. Para produção, gere o EMV-PAYLOAD conforme a especificação BACEN ou via gateway.
+    const payload = `PIX-KEY:${pixKey}|VALOR:${value}|PLANO:${planoId}`;
+    txt.value = payload;
     const img = document.getElementById('pix_qr');
-    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(dummyCode)}`;
+    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(payload)}`;
     img.style.display = 'block';
   });
 });
