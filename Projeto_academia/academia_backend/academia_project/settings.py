@@ -221,8 +221,6 @@ CSRF_TRUSTED_ORIGINS = config(
 
 # Modelo de usuário customizado
 AUTH_USER_MODEL = 'academia.Usuario'
-<<<<<<< Current (Your changes)
-=======
 
 # Security settings for production
 if not DEBUG:
@@ -233,4 +231,3 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
->>>>>>> Incoming (Background Agent changes)

@@ -6,6 +6,30 @@ python-decouple==3.8
 Pillow==10.4.0
 PyJWT==2.10.1
 <<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+=======
+whitenoise==6.7.0
+dj-database-url==2.3.0
+gunicorn==22.0.0
+>>>>>>> Incoming (Background Agent changes)
+=======
+whitenoise==6.7.0
+dj-database-url==2.3.0
+gunicorn==22.0.0
+>>>>>>> Incoming (Background Agent changes)
+=======
+whitenoise==6.7.0
+dj-database-url==2.3.0
+gunicorn==22.0.0
+>>>>>>> Incoming (Background Agent changes)
+=======
+whitenoise==6.7.0
+dj-database-url==2.3.0
+gunicorn==22.0.0
+>>>>>>> Incoming (Background Agent changes)
 =======
 whitenoise==6.7.0
 dj-database-url==2.3.0
