@@ -111,6 +111,8 @@ document.addEventListener('DOMContentLoaded', function() {
             password: formData.get('password'),
             password_confirm: formData.get('password_confirm')
         };
+        const planoId = document.getElementById('plano')?.value;
+        const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value;
         
         // Mostrar loading
         AuthUtils.setLoading(submitButton, true);
@@ -134,17 +136,46 @@ document.addEventListener('DOMContentLoaded', function() {
                     'success'
                 );
                 
-                // Se retornou tokens, salvar e redirecionar
+                // Se retornou tokens, salvar e criar matrícula + redirecionar
                 if (data.access && data.refresh) {
                     AuthUtils.saveTokens(data.access, data.refresh);
                     
                     if (data.user) {
                         localStorage.setItem('user_data', JSON.stringify(data.user));
                     }
-                    
-                    setTimeout(() => {
-                        window.location.href = '/portal/';
-                    }, 1000);
+                    // Criar matrícula se escolheu plano
+                    if (planoId) {
+                        try {
+                            const respMat = await fetch(`${API_BASE_URL}/planos/escolher/`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                                },
+                                body: JSON.stringify({ plano_id: parseInt(planoId) })
+                            });
+                            const matData = await respMat.json();
+                            if (!respMat.ok) {
+                                console.warn('Falha ao criar matrícula:', matData);
+                            } else {
+                                localStorage.setItem('last_matricula', JSON.stringify(matData.matricula || {}));
+                            }
+                        } catch (e) { console.error(e); }
+                    }
+
+                    // Decidir rota de checkout conforme método
+                    if (paymentMethod && planoId) {
+                        const sel = document.getElementById('plano');
+                        const opt = sel.options[sel.selectedIndex];
+                        const preco = opt?.dataset?.preco || '0';
+                        const dias = opt?.dataset?.duracao || '30';
+                        const tier = window.getPlanTier(parseInt(dias));
+                        const qs = new URLSearchParams({ plano_id: String(planoId), method: paymentMethod, preco: String(preco), tier });
+                        setTimeout(() => { window.location.href = `/static/html/checkout_frontend.html?${qs.toString()}`; }, 800);
+                        return;
+                    }
+
+                    setTimeout(() => { window.location.href = '/portal/'; }, 800);
                 } else {
                     // Se não retornou tokens, redirecionar para login
                     setTimeout(() => {
