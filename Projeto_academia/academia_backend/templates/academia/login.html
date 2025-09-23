@@ -64,9 +64,9 @@
 
           if (response.ok) {
             // Login bem-sucedido
-            localStorage.setItem('accessToken', result.access);
-            localStorage.setItem('refreshToken', result.refresh);
-            localStorage.setItem('user', JSON.stringify(result.user));
+            localStorage.setItem('access_token', result.access);
+            localStorage.setItem('refresh_token', result.refresh);
+            localStorage.setItem('user_data', JSON.stringify(result.user));
             window.location.href = '/portal/'; // Redirecionar para o portal
           } else {
             // Erro no login
