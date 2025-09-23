@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Login - AthleTech">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
+    <title>Login AthleTech</title>
+    <link rel="stylesheet" href="{% static 'css/auth_frontend.css' %}" />
+    <script>
+      window.API_CONFIG = {
+        API_BASE_URL: "/api"
+      };
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="login-box">
+        <h2 id="form_title">Login</h2>
+        <form id="loginForm" method="POST" action="/api/auth/login/">     
+
+          <div class="input-box">
+            <input type="email" name="email" required />
+            <label>Email</label>
+          </div>
+          <div class="input-box">
+            <input type="password" name="password" required />
+            <label>Senha</label>
+          </div>
+          <div class="forgot-pass">
+            <a href="{% static 'html/recuperar.html' %}">Esqueceu a senha?</a>  
+          </div>
+            <button type="submit" class="btn">Entrar</button>
+          <div class="signup-link">
+            <a href="{% url 'cadastro' %}">Cadastre-se</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+    <script>
+      document.getElementById('loginForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+          const response = await fetch(form.action, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            // Login bem-sucedido
+            localStorage.setItem('accessToken', result.access);
+            localStorage.setItem('refreshToken', result.refresh);
+            localStorage.setItem('user', JSON.stringify(result.user));
+            window.location.href = '/portal/'; // Redirecionar para o portal
+          } else {
+            // Erro no login
+            alert(result.message || 'Erro ao fazer login. Verifique suas credenciais.');
+            console.error('Erro de login:', result);
+          }
+        } catch (error) {
+          console.error('Erro na requisição:', error);
+          alert('Ocorreu um erro na comunicação com o servidor.');
+        }
+      });
+    </script>
+
+

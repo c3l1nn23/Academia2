@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cadastro - AthleTech">
+  <link rel="icon" href="{% static 'images/favicon.ico' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="{% static 'css/cadastro_frontend.css' %}">
+  <title>Criar conta</title>
+</head>
+<body style="background-image: url('{% static 'images/fundo.png' %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+  <main id="form_container">
+    <div id="form_header" class="container">
+      <h1 id="form_title">Criar conta</h1>
+    </div>
+
+    <!-- Formulário corrigido -->
+    <form id="form" method="POST" action="{% url 'cadastro' %}">
+      {% csrf_token %}
+      <div id="input_container">
+        <div class="input-box">
+          <label for="name" class="form-label">Primeiro nome</label>
+          <div class="input-field">
+            <input type="text" name="name" id="first_name" class="form-control" placeholder="Fulano" required>
+            <i class="fa-regular fa-user"></i>
+          </div>
+        </div>
+
+        <div class="input-box">
+          <label for="last_name" class="form-label">Último nome</label>
+          <div class="input-field">
+            <input type="text" name="last_name" id="last_name" class="form-control" placeholder="De Tal" required>
+            <i class="fa-regular fa-user"></i>
+          </div>
+        </div>
+
+        <div class="input-box">
+          <label for="birth_date" class="form-label">Nascimento</label>
+          <div class="input-field">
+            <input type="date" name="birth_date" id="birth_date" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="input-box">
+          <label for="email" class="form-label">E-mail</label>
+          <div class="input-field">
+            <input type="email" name="email" id="email" class="form-control" placeholder="exemplo@gmail.com" required>
+            <i class="fa-regular fa-envelope"></i>
+          </div>
+        </div>
+
+        <div class="input-box">
+          <label for="password" class="form-label">Senha</label>
+          <div class="input-field">
+            <input type="password" name="password" id="password" class="form-control" placeholder="*******" required>
+            <i class="fa-regular fa-eye-slash password-icon"></i>
+          </div>
+        </div>
+
+        <div class="input-box">
+          <label for="password_confirm" class="form-label">Confirmar senha</label>
+          <div class="input-field">
+            <input type="password" name="password_confirm" id="password_confirm" class="form-control" placeholder="*******" required>
+            <i class="fa-regular fa-eye-slash password-icon"></i>
+          </div>
+        </div>
+
+        <!-- Radios corrigidos -->
+        <div class="radio-container">
+          <label class="form-label">Gênero</label>
+          <div id="gender_inputs">
+            <label class="radio-wrapper-12" for="female">
+              <input type="radio" name="gender" id="female" value="female" required>
+              <span class="text">Feminino</span>
+            </label>
+
+            <label class="radio-wrapper-12" for="male">
+              <input type="radio" name="gender" id="male" value="male">
+              <span class="text">Masculino</span>
+            </label>
+
+            <label class="radio-wrapper-12" for="other">
+              <input type="radio" name="gender" id="other" value="other">
+              <span class="text">Outro</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-options">
+        <div class="checkbox-wrapper-1">
+          <input type="checkbox" id="terms" class="substituted" required />
+          <label for="terms">
+            Aceito os <a href="#" target="_blank">termos de uso</a>
+          </label>
+        </div>
+      </div>
+      
+      <div class="button-container">
+        <button type="submit" class="btn-default">
+          <i class="fa-solid fa-check"></i>
+          Criar conta
+        </button>
+      </div>
+    </form>
+  </main>
+
+  <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

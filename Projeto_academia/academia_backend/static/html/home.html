@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academia - Home</title>
+    <link rel="stylesheet" href="../css/home.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Academia Fitness</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#planos">Planos</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#contato">Contato</a></li>
+                <li><a href="login.html" class="btn-login">Login</a></li>
+                <li><a href="cadastro.html" class="btn-cadastro"></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h2>Transforme seu corpo, transforme sua vida</h2>
+                <p>A melhor academia da cidade com equipamentos modernos e profissionais qualificados</p>
+                <a href="cadastro.html" class="btn-primary">Comece Agora</a>
+            </div>
+        </section>
+
+        <section id="planos" class="planos">
+            <div class="container">
+                <h2>Nossos Planos</h2>
+                <div class="planos-grid">
+                    <div class="plano-card">
+                        <h3>Básico</h3>
+                        <div class="preco">R$ 89,90/mês</div>
+                        <ul>
+                            <li>Acesso à musculação</li>
+                            <li>Horário comercial</li>
+                            <li>Avaliação física</li>
+                        </ul>
+                        <button class="btn-plano">Escolher Plano</button>
+                    </div>
+                    <div class="plano-card featured">
+                        <h3>Premium</h3>
+                        <div class="preco">R$ 149,90/mês</div>
+                        <ul>
+                            <li>Acesso completo</li>
+                            <li>24 horas</li>
+                            <li>Personal trainer</li>
+                            <li>Aulas em grupo</li>
+                        </ul>
+                        <button class="btn-plano">Escolher Plano</button>
+                    </div>
+                    <div class="plano-card">
+                        <h3>VIP</h3>
+                        <div class="preco">R$ 249,90/mês</div>
+                        <ul>
+                            <li>Todos os benefícios</li>
+                            <li>Nutricionista</li>
+                            <li>Massagem</li>
+                            <li>Área VIP</li>
+                        </ul>
+                        <button class="btn-plano">Escolher Plano</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sobre" class="sobre">
+            <div class="container">
+                <h2>Sobre Nós</h2>
+                <p>Com mais de 10 anos de experiência, nossa academia oferece o melhor em equipamentos, estrutura e atendimento personalizado para você alcançar seus objetivos.</p>
+            </div>
+        </section>
+
+        <section id="contato" class="contato">
+            <div class="container">
+                <h2>Entre em Contato</h2>
+                <div class="contato-info">
+                    <div class="info-item">
+                        <h3>Telefone</h3>
+                        <p>(11) 9999-9999</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>Email</h3>
+                        <p>contato@academiafitness.com</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>Endereço</h3>
+                        <p>Rua das Academias, 123 - São Paulo, SP</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Academia Fitness. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="../js/home.js"></script>
+</body>
+</html>
