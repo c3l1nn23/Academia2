@@ -111,78 +111,27 @@ document.addEventListener('DOMContentLoaded', function() {
             password: formData.get('password'),
             password_confirm: formData.get('password_confirm')
         };
+        const planoId = document.getElementById('plano')?.value;
+        const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value;
+
+        if (!planoId || !paymentMethod) {
+            AuthUtils.showMessage('Escolha um plano e o método de pagamento (PIX).', 'error');
+            return;
+        }
         
         // Mostrar loading
         AuthUtils.setLoading(submitButton, true);
-        AuthUtils.showMessage('Criando sua conta...', 'info');
-        
-        try {
-            const response = await fetch(`${API_BASE_URL}/auth/register/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok) {
-                // Cadastro bem-sucedido
-                AuthUtils.showMessage(
-                    'Conta criada com sucesso! Fazendo login automaticamente...',
-                    'success'
-                );
-                
-                // Se retornou tokens, salvar e redirecionar
-                if (data.access && data.refresh) {
-                    AuthUtils.saveTokens(data.access, data.refresh);
-                    
-                    if (data.user) {
-                        localStorage.setItem('user_data', JSON.stringify(data.user));
-                    }
-                    
-                    setTimeout(() => {
-                        window.location.href = '/portal/';
-                    }, 1000);
-                } else {
-                    // Se não retornou tokens, redirecionar para login
-                    setTimeout(() => {
-                        window.location.href = '/login/?message=account_created&redirect=/portal/';
-                    }, 1500);
-                }
-                
-            } else {
-                // Erro no cadastro
-                let errorMessage = 'Erro ao criar conta';
-                
-                if (data.email && data.email[0]) {
-                    errorMessage = 'Email: ' + data.email[0];
-                } else if (data.password && data.password[0]) {
-                    errorMessage = 'Senha: ' + data.password[0];
-                } else if (data.non_field_errors && data.non_field_errors[0]) {
-                    errorMessage = data.non_field_errors[0];
-                } else if (data.detail) {
-                    errorMessage = data.detail;
-                }
-                
-                AuthUtils.showMessage(errorMessage, 'error');
-                
-                // Destacar campos com erro
-                if (data.email) {
-                    fields.email.classList.add('invalid');
-                }
-                if (data.password) {
-                    fields.password.classList.add('invalid');
-                }
-            }
-            
-        } catch (error) {
-            console.error('Erro no cadastro:', error);
-            AuthUtils.showMessage('Erro de conexão. Tente novamente.', 'error');
-        } finally {
-            AuthUtils.setLoading(submitButton, false);
-        }
+        AuthUtils.showMessage('Indo para o checkout para concluir o pagamento...', 'info');
+
+        // Guardar cadastro pendente até o pagamento
+        const sel = document.getElementById('plano');
+        const opt = sel.options[sel.selectedIndex];
+        const preco = opt?.dataset?.preco || '0';
+        const dias = opt?.dataset?.duracao || '30';
+        const tier = window.getPlanTier(parseInt(dias));
+        localStorage.setItem('pending_signup', JSON.stringify({ userData, planoId: parseInt(planoId), paymentMethod, preco, dias, tier }));
+        const qs = new URLSearchParams({ plano_id: String(planoId), method: paymentMethod, preco: String(preco), tier });
+        window.location.href = `/static/html/checkout_frontend.html?${qs.toString()}`;
     });
     
     // Auto-focus no primeiro campo

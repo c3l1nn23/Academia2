@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
-from .models import Usuario, Plano, Matricula, Exercicio, Treino, TreinoExercicio, Avaliacao, Frequencia
+from .models import Usuario, Plano, Matricula, Exercicio, Treino, TreinoExercicio, Avaliacao, Frequencia, Pedido
 
 class UsuarioSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
@@ -220,3 +220,10 @@ class ChangePasswordSerializer(serializers.Serializer):
         if not user.check_password(value):
             raise serializers.ValidationError("Senha atual incorreta.")
         return value
+
+class PedidoSerializer(serializers.ModelSerializer):
+    plano_nome = serializers.CharField(source='plano.nome', read_only=True)
+    class Meta:
+        model = Pedido
+        fields = ['id', 'id_publico', 'usuario', 'plano', 'plano_nome', 'valor', 'metodo', 'status', 'pix_payload', 'pix_qr', 'criado_em']
+        read_only_fields = ['id', 'id_publico', 'status', 'pix_payload', 'pix_qr', 'criado_em', 'usuario', 'valor']

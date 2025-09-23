@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
+from django.conf import settings
+import uuid
 
 class Usuario(AbstractUser):
     """Modelo customizado de usuário para a academia"""
@@ -198,3 +200,38 @@ class Frequencia(models.Model):
         if self.data_saida:
             return self.data_saida - self.data_entrada
         return None
+
+class Pedido(models.Model):
+    """Pedido de pagamento (PIX) atrelado a uma matrícula/plano."""
+    METODO_PIX = 'pix'
+    METODO_CHOICES = [
+        (METODO_PIX, 'PIX'),
+    ]
+
+    STATUS_PENDENTE = 'pendente'
+    STATUS_APROVADO = 'aprovado'
+    STATUS_CANCELADO = 'cancelado'
+    STATUS_EXPIRADO = 'expirado'
+    STATUS_CHOICES = [
+        (STATUS_PENDENTE, 'Pendente'),
+        (STATUS_APROVADO, 'Aprovado'),
+        (STATUS_CANCELADO, 'Cancelado'),
+        (STATUS_EXPIRADO, 'Expirado'),
+    ]
+
+    id_publico = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE, related_name='pedidos')
+    plano = models.ForeignKey('Plano', on_delete=models.PROTECT, related_name='pedidos')
+    valor = models.DecimalField(max_digits=8, decimal_places=2)
+    metodo = models.CharField(max_length=10, choices=METODO_CHOICES, default=METODO_PIX)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDENTE)
+    pix_payload = models.TextField(blank=True)
+    pix_qr = models.TextField(blank=True)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-criado_em']
+
+    def __str__(self):
+        return f"Pedido {self.id_publico} - {self.usuario} - {self.plano} - {self.status}"
