@@ -11,13 +11,13 @@ from django.contrib import messages
 from django.db.models import Q, Count
 from django.utils import timezone
 from datetime import datetime, timedelta
-from .models import Usuario, Plano, Matricula, Exercicio, Treino, TreinoExercicio, Avaliacao, Frequencia
+from .models import Usuario, Plano, Matricula, Exercicio, Treino, TreinoExercicio, Avaliacao, Frequencia, Pedido
 from .serializers import (
     UsuarioSerializer, UsuarioProfileSerializer, LoginSerializer,
     PlanoSerializer, MatriculaSerializer, ExercicioSerializer,
     TreinoSerializer, AvaliacaoSerializer, FrequenciaSerializer,
     CheckEmailSerializer, PasswordResetSerializer, EscolherPlanoSerializer,
-    DashboardSerializer, ChangePasswordSerializer
+    DashboardSerializer, ChangePasswordSerializer, PedidoSerializer
 )
 
 class RegisterView(APIView):
@@ -296,6 +296,62 @@ class DashboardView(APIView):
         
         serializer = DashboardSerializer(data)
         return Response(serializer.data)
+
+class PixInitiateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        plano_id = request.data.get('plano_id')
+        try:
+            plano = Plano.objects.get(id=plano_id, ativo=True)
+        except Plano.DoesNotExist:
+            return Response({'detail': 'Plano inválido'}, status=400)
+
+        # criar pedido pendente
+        pedido = Pedido.objects.create(
+            usuario=request.user,
+            plano=plano,
+            valor=plano.preco,
+            metodo=Pedido.METODO_PIX,
+            status=Pedido.STATUS_PENDENTE,
+        )
+
+        # gerar payload simples (didático)
+        from django.conf import settings as djsettings
+        key = getattr(djsettings, 'PIX_KEY', '')
+        payload = f"PIX-KEY:{key}|VALOR:{plano.preco}|PLANO:{plano.id}|PED:{pedido.id_publico}"
+        pedido.pix_payload = payload
+        pedido.pix_qr = payload
+        pedido.save()
+
+        return Response(PedidoSerializer(pedido).data, status=201)
+
+class PixStatusView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pedido_id):
+        try:
+            pedido = Pedido.objects.get(id_publico=pedido_id, usuario=request.user)
+        except Pedido.DoesNotExist:
+            return Response({'detail': 'Pedido não encontrado'}, status=404)
+        return Response(PedidoSerializer(pedido).data)
+
+class PixConfirmView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, pedido_id):
+        try:
+            pedido = Pedido.objects.get(id_publico=pedido_id, usuario=request.user)
+        except Pedido.DoesNotExist:
+            return Response({'detail': 'Pedido não encontrado'}, status=404)
+
+        if pedido.status == Pedido.STATUS_APROVADO:
+            return Response(PedidoSerializer(pedido).data)
+
+        # marcar como aprovado (simulação de webhook)
+        pedido.status = Pedido.STATUS_APROVADO
+        pedido.save()
+        return Response(PedidoSerializer(pedido).data)
 
 def login_view(request):
     if request.method == 'POST':

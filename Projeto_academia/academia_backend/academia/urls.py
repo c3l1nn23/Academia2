@@ -36,4 +36,9 @@ urlpatterns = [
     path('treinos/<int:pk>/', views.TreinoDetailView.as_view(), name='treino_detail'),
     path('exercicios/', views.ExercicioListView.as_view(), name='exercicios'),
     path('avaliacoes/', views.AvaliacaoListView.as_view(), name='avaliacoes'),
+
+    # Pagamentos PIX
+    path('payments/pix/initiate/', views.PixInitiateView.as_view(), name='pix_initiate'),
+    path('payments/pix/status/<uuid:pedido_id>/', views.PixStatusView.as_view(), name='pix_status'),
+    path('payments/pix/confirm/<uuid:pedido_id>/', views.PixConfirmView.as_view(), name='pix_confirm'),
 ]

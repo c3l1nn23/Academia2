@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Usuario, Plano, Matricula, Exercicio, Treino, TreinoExercicio, Avaliacao, Frequencia
+from .models import Usuario, Plano, Matricula, Exercicio, Treino, TreinoExercicio, Avaliacao, Frequencia, Pedido
 
 @admin.register(Usuario)
 class UsuarioAdmin(UserAdmin):
@@ -190,3 +190,10 @@ class FrequenciaAdmin(admin.ModelAdmin):
 admin.site.site_header = "Academia Fitness - Administração"
 admin.site.site_title = "Academia Admin"
 admin.site.index_title = "Painel de Administração"
+
+@admin.register(Pedido)
+class PedidoAdmin(admin.ModelAdmin):
+    list_display = ['id_publico', 'usuario', 'plano', 'valor', 'metodo', 'status', 'criado_em']
+    list_filter = ['status', 'metodo', 'criado_em']
+    search_fields = ['usuario__email', 'usuario__username', 'plano__nome', 'id_publico']
+    readonly_fields = ['id_publico', 'criado_em', 'atualizado_em', 'pix_payload', 'pix_qr']

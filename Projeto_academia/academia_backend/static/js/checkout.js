@@ -46,20 +46,43 @@ document.addEventListener('DOMContentLoaded', function() {
     finalizeSignup();
   });
 
-  // Botão de gerar PIX (simulação)
-  document.getElementById('btn_gerar_pix').addEventListener('click', function() {
-    const txt = document.getElementById('pix_copy');
-    const pixKey = (window.SALES_CONFIG && window.SALES_CONFIG.pixKey) ? String(window.SALES_CONFIG.pixKey) : '';
-    const valueStr = ckPreco.textContent.replace(/[^0-9.,]/g, '').replace(',', '.');
-    const value = parseFloat(valueStr || '0').toFixed(2);
-    // Atenção: abaixo é apenas um payload didático. Para produção, gere o EMV-PAYLOAD conforme a especificação BACEN ou via gateway.
-    const payload = `PIX-KEY:${pixKey}|VALOR:${value}|PLANO:${planoId}`;
-    txt.value = payload;
-    const img = document.getElementById('pix_qr');
-    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(payload)}`;
-    img.style.display = 'block';
-    // Simulação de confirmação automática após 5s (substituir por webhook/backoffice)
-    setTimeout(() => { finalizeSignup(); }, 5000);
+  // Botão de gerar PIX via API (inicia pedido e começa polling)
+  document.getElementById('btn_gerar_pix').addEventListener('click', async function() {
+    if (!pending) { alert('Cadastro pendente não encontrado. Volte e preencha novamente.'); return; }
+    try {
+      // iniciar pedido PIX
+      const token = localStorage.getItem('access_token');
+      // se não logado ainda, criar sessão temporária anônima? Aqui exigimos login posterior no finalize
+      const initRes = await fetch('/api/payments/pix/initiate/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': `Bearer ${token}` } : {}) },
+        body: JSON.stringify({ plano_id: pending.planoId })
+      });
+      const initData = await initRes.json();
+      if (!initRes.ok) { alert(initData.detail || 'Falha ao iniciar PIX'); return; }
+      const pedidoId = initData.id_publico;
+      // preencher QR e copia-e-cola
+      const txt = document.getElementById('pix_copy');
+      txt.value = initData.pix_payload || initData.pix_qr || '';
+      const img = document.getElementById('pix_qr');
+      img.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(txt.value)}`;
+      img.style.display = 'block';
+
+      // polling de status
+      const timer = setInterval(async () => {
+        try {
+          const stRes = await fetch(`/api/payments/pix/status/${pedidoId}/`, { headers: token ? { 'Authorization': `Bearer ${token}` } : {} });
+          const stData = await stRes.json();
+          if (stRes.ok && stData.status === 'aprovado') {
+            clearInterval(timer);
+            await finalizeSignup();
+          }
+        } catch (_) { /* ignora tentativas */ }
+      }, 5000);
+    } catch (e) {
+      console.error(e);
+      alert('Não foi possível iniciar o pagamento PIX.');
+    }
   });
 
   async function finalizeSignup() {
