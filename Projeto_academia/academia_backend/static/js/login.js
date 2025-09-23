@@ -70,9 +70,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Redirecionar após 1 segundo
                 setTimeout(() => {
-                    const redirectTo = new URLSearchParams(window.location.search).get('redirect') || 'home.html';
+                    const redirectTo = new URLSearchParams(window.location.search).get('redirect') || '/portal/';
                     window.location.href = redirectTo;
-                }, 1000);
+                }, 800);
                 
             } else {
                 // Erro no login

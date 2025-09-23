@@ -143,12 +143,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     
                     setTimeout(() => {
-                        window.location.href = 'home.html';
-                    }, 1500);
+                        window.location.href = '/portal/';
+                    }, 1000);
                 } else {
                     // Se não retornou tokens, redirecionar para login
                     setTimeout(() => {
-                        window.location.href = 'login.html?message=account_created';
+                        window.location.href = '/login/?message=account_created&redirect=/portal/';
                     }, 1500);
                 }
                 
