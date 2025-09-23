@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const secCartao = document.getElementById('sec_cartao');
   const secPix = document.getElementById('sec_pix');
+  const pending = (function(){ try { return JSON.parse(localStorage.getItem('pending_signup')||'null'); } catch(_) { return null; } })();
 
   // Carregar dados do plano para exibir nome e duração
   (async function loadPlano(){
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Botão de pagar cartão (simulação)
   document.getElementById('btn_pagar_cartao').addEventListener('click', function() {
     alert('Pagamento por cartão simulado. Integre seu gateway no checkout.js.');
-    window.location.href = '/portal/';
+    finalizeSignup();
   });
 
   // Botão de gerar PIX (simulação)
@@ -57,6 +58,45 @@ document.addEventListener('DOMContentLoaded', function() {
     const img = document.getElementById('pix_qr');
     img.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(payload)}`;
     img.style.display = 'block';
+    // Simulação de confirmação automática após 5s (substituir por webhook/backoffice)
+    setTimeout(() => { finalizeSignup(); }, 5000);
   });
+
+  async function finalizeSignup() {
+    if (!pending) { window.location.href = '/portal/'; return; }
+    // 1) Criar conta
+    try {
+      const resReg = await fetch('/api/auth/register/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pending.userData)
+      });
+      const dataReg = await resReg.json();
+      if (!resReg.ok) { alert('Falha ao criar conta: ' + (dataReg.detail || 'verifique os dados')); return; }
+      // salvar tokens
+      localStorage.setItem('access_token', dataReg.access);
+      localStorage.setItem('refresh_token', dataReg.refresh);
+      if (dataReg.user) localStorage.setItem('user_data', JSON.stringify(dataReg.user));
+      // 2) Criar matrícula
+      try {
+        const respMat = await fetch('/api/planos/escolher/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          },
+          body: JSON.stringify({ plano_id: pending.planoId })
+        });
+        const matData = await respMat.json();
+        if (!respMat.ok) { console.warn('Falha ao criar matrícula:', matData); }
+      } catch(_) {}
+      // limpar pendência e ir para portal
+      localStorage.removeItem('pending_signup');
+      window.location.href = '/portal/';
+    } catch (e) {
+      console.error(e);
+      alert('Erro ao concluir cadastro. Tente novamente.');
+    }
+  }
 });
 
