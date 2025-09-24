@@ -187,8 +187,8 @@ class FrequenciaAdmin(admin.ModelAdmin):
     )
 
 # Customizar o título do admin
-admin.site.site_header = "Academia AthleTech - Administração"
-admin.site.site_title = "AthleTech Admin"
+admin.site.site_header = "Academia AthleTech  - Administração"
+admin.site.site_title = "Academia Admin"
 admin.site.index_title = "Painel de Administração"
 
 @admin.register(Pedido)
