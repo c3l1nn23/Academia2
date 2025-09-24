@@ -16,7 +16,6 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='academia/home.html'), name='home'),
     path('login/', TemplateView.as_view(template_name='academia/login.html'), name='login'),
     path('portal/', TemplateView.as_view(template_name='html/portal_frontend.html'), name='portal'),
-    path('portal/planos/', TemplateView.as_view(template_name='html/portal_planos_frontend.html'), name='portal_planos'),
     path('planos/', TemplateView.as_view(template_name='html/planos_frontend.html'), name='planos'),
     path('cadastro/', TemplateView.as_view(template_name='html/cadastro_frontend.html'), name='cadastro'),
     path('robots.txt', static_serve, {'path': 'robots.txt', 'document_root': settings.STATIC_ROOT}),

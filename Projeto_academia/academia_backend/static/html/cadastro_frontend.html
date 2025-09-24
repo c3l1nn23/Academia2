@@ -89,29 +89,7 @@
         </div>
       </div>
 
-      <!-- Seletor de plano -->
-      <div class="card" style="margin: 16px 0; padding: 12px; background: #0b0b0bd1; border-radius: 10px;">
-        <h3 style="margin: 0 0 8px">Escolha seu plano</h3>
-        <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
-          <div>
-            <label for="plano" class="form-label">Plano</label>
-            <select id="plano" name="plano" class="form-control" required></select>
-          </div>
-          <div>
-            <label class="form-label">Preço</label>
-            <input id="plano_preco" class="form-control" type="text" disabled value="R$ -" />
-          </div>
-          <div>
-            <label class="form-label">Duração</label>
-            <input id="plano_duracao" class="form-control" type="text" disabled value="- dias" />
-          </div>
-          <div>
-            <label class="form-label">Pagamento</label>
-            <div id="metodos_pagamento" style="display:flex; gap:8px; align-items:center;"></div>
-          </div>
-        </div>
-        <small id="regra_pagamento_hint" class="muted"></small>
-      </div>
+      
 
       <div class="form-options">
         <div class="checkbox-wrapper-1">
@@ -130,68 +108,10 @@
       </div>
     </form>
   </main>
-  <script src="{% static 'js/config.js' %}"></script>
   <script src="{% static 'js/script.js' %}"></script>
   <script>
     window.API_CONFIG = { API_BASE_URL: '/api' };
   </script>
-  <script>
-    // Carregar planos do backend e aplicar regras de pagamento
-    document.addEventListener('DOMContentLoaded', async function() {
-      const selectPlano = document.getElementById('plano');
-      const precoEl = document.getElementById('plano_preco');
-      const duracaoEl = document.getElementById('plano_duracao');
-      const metodosEl = document.getElementById('metodos_pagamento');
-      const hintEl = document.getElementById('regra_pagamento_hint');
-
-      async function loadPlanos() {
-        try {
-          const res = await fetch('/api/planos/');
-          const data = await res.json();
-          const planos = Array.isArray(data) ? data : data.results || [];
-          selectPlano.innerHTML = '';
-          planos.forEach(p => {
-            const opt = document.createElement('option');
-            opt.value = p.id;
-            opt.textContent = `${p.nome}`;
-            opt.dataset.preco = p.preco;
-            opt.dataset.duracao = p.duracao_dias;
-            selectPlano.appendChild(opt);
-          });
-          updatePlanoInfo();
-        } catch (e) {
-          console.error('Falha ao carregar planos', e);
-        }
-      }
-
-      function updatePlanoInfo() {
-        const opt = selectPlano.options[selectPlano.selectedIndex];
-        if (!opt) return;
-        const preco = parseFloat(opt.dataset.preco || '0');
-        const dias = parseInt(opt.dataset.duracao || '0');
-        precoEl.value = preco ? `R$ ${preco.toFixed(2)}` : 'R$ -';
-        duracaoEl.value = `${dias} dias`;
-
-        // aplicar regras de pagamento
-        const tier = window.getPlanTier(dias);
-        const methods = window.SALES_CONFIG.paymentRules[tier] || ['cartao'];
-        metodosEl.innerHTML = '';
-        methods.forEach(m => {
-          const id = `pg_${m}`;
-          const label = window.SALES_CONFIG.labels[m] || m;
-          const wrapper = document.createElement('label');
-          wrapper.style.display = 'inline-flex';
-          wrapper.style.gap = '6px';
-          wrapper.style.alignItems = 'center';
-          wrapper.innerHTML = `<input type="radio" name="payment_method" value="${m}" required> ${label}`;
-          metodosEl.appendChild(wrapper);
-        });
-        hintEl.textContent = tier === 'mensal' ? 'Mensal: aceita Pix e Cartão.' : (tier === 'trimestral' ? 'Trimestral: somente Cartão.' : 'Anual: somente Cartão.');
-      }
-
-      selectPlano.addEventListener('change', updatePlanoInfo);
-      loadPlanos();
-    });
-  </script>
+  
 </body>
 </html>

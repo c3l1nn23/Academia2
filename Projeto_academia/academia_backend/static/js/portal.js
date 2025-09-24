@@ -74,17 +74,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // bloquear acesso se não tem matrícula ativa
-    if (!data.matricula_ativa) {
-      const warn = document.createElement('div');
-      warn.className = 'card';
-      warn.innerHTML = '<h2>Assinatura necessária</h2><p class="muted">Nenhuma matrícula ativa encontrada. Conclua seu pagamento para liberar o portal.</p><div style="margin-top:8px;"><a href="/portal/planos/" class="btn">Escolher plano</a></div>';
-      const main = document.querySelector('main.content');
-      if (main) {
-        main.innerHTML = '';
-        main.appendChild(warn);
-      }
-      return;
-    }
+    // Se não houver matrícula ativa, apenas mostra perfil vazio; sem CTA de planos
 
     // Fill treinos
     if (Array.isArray(data.treinos_recentes)) {
