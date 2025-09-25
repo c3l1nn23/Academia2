@@ -41,27 +41,13 @@
     <!-- Home -->
     <section id="home">
       <div id="cta">
-        <h1 class="title" id="cta-title">
-          A Academia Dos <span>Sonhos</span>
-        </h1>
+        <h2 class="title" id="cta-title">
+          Tecnologia e treino juntos para a sua melhor versão.
+        </h2>
         <p class="descripition">
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-          Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,
+          Na AthleTech, unimos inovação, ciência e performance para transformar seus treinos em resultados reais. Aqui você encontra equipamentos modernos, treinos inteligentes e acompanhamento profissional em um ambiente motivador. Seja qual for o seu objetivo — ganhar força, perder peso ou melhorar sua qualidade de vida — nós temos o plano certo para você evoluir todos os dias.
         </p>
 
-        <div id="cta_buttons">
-          <a href="/planos/" class="btn-default">Ver Planos</a>
-        </div>
-
-        <div class="social-media-buttons">
-          <a href="https://wa.me/5521968642276">
-            <i class="fa-brands fa-whatsapp"></i>
-            <span></span>
-          </a>
-          <a href="https://www.instagram.com/_castrox1">
-            <i class="fa-brands fa-instagram"></i>
-          </a>
-        </div>
       </div>
 
       <div id="banner">
@@ -78,54 +64,41 @@
         <!-- Card 1 -->
         <div class="dish">
           <img src="{% static 'images/planos.png' %}" alt="Imagem fundo Planos" class="dish-image" width="230" height="300">
-          <h3 class="dish-title">Mensal</h3>
-          <span class="dish-description">Lorem Ipsum aasdw</span>
-          <div class="dish-rate">
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <span>Mais em conta</span>
-          </div>
+          <h2 class="dish-title">Plano Básico</h2>
+          <span class="dish-description">O essencial para começar sua evolução.</span>
           <div class="dish-price">
-            <h4>R$ 129,99/mês</h4>
-            <button class="btn-default"><i class="fa-solid fa-basket-shopping"></i></button>
+            <h4>R$ 99,90/mês</h4>
+            <button class="btn-default"> <a href="{% url 'planos' %}">
+              <i class="fa-solid fa-basket-shopping">
+
+              </i>Mais informações</button> </a>
           </div>
         </div>
 
         <!-- Card 2 -->
         <div class="dish">
           <img src="{% static 'images/planos.png' %}" alt="Imagem fundo Planos" class="dish-image" width="230" height="300">
-          <h3 class="dish-title">Trimestral</h3>
-          <span class="dish-description">Lorem Ipsum aasdw</span>
-          <div class="dish-rate">
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <span>Mais Popular</span>
-          </div>
+          <h2 class="dish-title">Plano Premium</h2>
+          <span class="dish-description">O equilíbrio perfeito entre suporte e performance.</span>
           <div class="dish-price">
-            <h4>R$ 129,99/mês</h4>
-            <button class="btn-default"><i class="fa-solid fa-basket-shopping"></i></button>
+            <h4>R$ 149,90/mês</h4>
+            <button class="btn-default"> <a href="{% url 'planos' %}">
+              <i class="fa-solid fa-basket-shopping">
+
+              </i>Mais informações</button> </a>
           </div>
         </div>
-
         <!-- Card 3 -->
         <div class="dish">
           <img src="{% static 'images/planos.png' %}" alt="Imagem fundo Planos" class="dish-image" width="230" height="300">
-          <h3 class="dish-title">Anual</h3>
-          <span class="dish-description">Lorem Ipsum aasdw</span>
-          <div class="dish-rate">
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <span>Mais Popular</span>
-          </div>
+          <h2 class="dish-title">Plano Elite</h2>
+          <span class="dish-description">Máxima performance com resultados sem limites.</span>
           <div class="dish-price">
-            <h4>R$ 129,99/mês</h4>
-            <button class="btn-default"><i class="fa-solid fa-basket-shopping"></i></button>
+            <h4>R$ 249,90/mês</h4>
+            <button class="btn-default"> <a href="{% url 'planos' %}">
+              <i class="fa-solid fa-basket-shopping">
+
+                </i>Mais informações</button> </a>
           </div>
         </div>
       </div>
@@ -144,19 +117,11 @@
             <img src="{% static 'images/avatares/avatar.png' %}" alt="" class="feedback-avatar">
             <div class="feedback-content">
               <p>
-                Marcelo
-                <span>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                </span>
+                João Mendes – 29 anos
+
               </p>
               <p>
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Maecenas eget neque id arcu aliquam fermentum eget in tortor. 
-                Suspendisse potenti. Maecenas non magna volutpat, sollicitudin velit a, ultrices mi. Etiam non mi aliquet,"
+                "Nunca gostei de academia, mas na AthleTech encontrei motivação de verdade. Os treinos são dinâmicos e os resultados apareceram rápido."
               </p>
             </div>
           </div>
@@ -166,26 +131,17 @@
               <img src="{% static 'images/avatares/avatar.png' %}" alt="" class="feedback-avatar">
               <div class="feedback-content">
                 <p>
-                  Marcelo
-                  <span>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                  </span>
+                  Carla Souza – 34 anos
+
                 </p>
                 <p>
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                  Maecenas eget neque id arcu aliquam fermentum eget in tortor. 
-                  Suspendisse potenti. Maecenas non magna volutpat, sollicitudin velit a, ultrices mi. Etiam non mi aliquet,"
+                  "O acompanhamento dos instrutores faz toda diferença. Hoje treino com segurança e me sinto mais confiante no meu corpo."
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <button class="btn-default">Ver Mais avaliações</button>
       </div>
     </section>
   </main>

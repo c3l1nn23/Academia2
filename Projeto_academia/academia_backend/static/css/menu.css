@@ -5,16 +5,24 @@ Container principal do menu
     align-items: center;
     min-height: 100vh;
     padding:  16px;
+    width: 100vh;
 }
 
 /* Seção de planos */
 .planos {
     border-radius: 12px;
-    width: 100%;
+    width: 100vh;
     max-width: 1200px;
     margin: 0 auto;
     padding: 32px 16px;
     position: relative;
+}
+#planos .section-subtitle{
+    font-size: 2em;
+    color: #ffffff;
+    text-align: center;
+    position: relative;
+    margin-bottom: 0px;
 }
 
 #planos h3 {
@@ -46,19 +54,19 @@ Container principal do menu
 #dishes {
     display: flex;
     flex-wrap: wrap;
-    gap: 24px;
+    gap: 50px;
     justify-content: center;
-    max-width: 1200px;
+    max-width: 1500px;
     margin: 32px auto;
-    padding: 0 16px;
-    width: 100%;
+    padding: 0 0px;
+    width: 100%; 
 }
 
 .dish {
-    background: #272727;
-    color: black;
+    background: transparent;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
+    backdrop-filter: blur(5px);
     border-radius: 12px;
-    box-shadow: rgba(0, 31, 84, 0.5) 0px 0px 0px 5px;
     padding: 15px;
     text-align: center;
     position: relative;
@@ -74,21 +82,33 @@ Container principal do menu
 }
 
 .dish-title {
-    color: #000000;
-}
-
-.dish-rate i {
-    color: #e9a209;
-}
-
-.dish-rate span {
     color: #ffffff;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 .dish-price {
-    display: flex;
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
     gap: 20px;
     color: #ffffff;
     text-align: center;
+    justify-content: center;
+    align-items: center;
 }
+.dish-price button {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.dish-price button a {
+    text-decoration: none;
+    color: #ffffff;
+}
+.dish-image{
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  }
